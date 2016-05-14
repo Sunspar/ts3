@@ -1,0 +1,19 @@
+<% server_binary = File.join @install_dir, 'ts3server' %>
+<% start_cmd = "#{server_binary}" %>
+[Unit]
+Description = TeamSpeak 3 VoIP Server
+After = network.target
+
+[Service]
+Type=simple
+Environment="LD_LIBRARY_PATH=<%= @install_dir %>"
+WorkingDirectory = <%= @install_dir %>
+ExecStart = <%= start_cmd %>
+TimeoutStartSec = 30
+TimeoutStopSec = 30
+Restart = always
+User = <%= @user %>
+Group = <%= @user %>
+
+[Install]
+WantedBy = multi-user.target
