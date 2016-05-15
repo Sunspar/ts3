@@ -1,14 +1,13 @@
-<% server_binary = File.join @install_dir, 'ts3server' %>
-<% start_cmd = "#{server_binary}" %>
 [Unit]
 Description = TeamSpeak 3 VoIP Server
 After = network.target
 
 [Service]
-Type=simple
-Environment="LD_LIBRARY_PATH=<%= @install_dir %>"
+Type=forking
+PIDFile = <%= File.join @install_dir, 'ts3server.pid' %>
 WorkingDirectory = <%= @install_dir %>
-ExecStart = <%= start_cmd %>
+ExecStart = <%= "#{File.join @install_dir, 'ts3server_startscript.sh'} start" %>
+ExecStop = <%= "#{File.join @install_dir, 'ts3server_startscript.sh'} stop" %>
 TimeoutStartSec = 30
 TimeoutStopSec = 30
 Restart = always

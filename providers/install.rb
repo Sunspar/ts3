@@ -8,23 +8,35 @@ action :install do
       path new_resource.install_dir
     end
 
-    # TODO: Is this valid for all versions?
-    url = "http://teamspeak.gameserver.gamed.de/ts3/releases/#{new_resource.version}/teamspeak3-server_linux_amd64-#{new_resource.version}.tar.bz2"
+    # Version 3.0.12 (and later?) are supplied as *.tar.bz2 archives, instead of the usual *.tar.gz.
+    version = resource_split_version
+    extension = 'tar.bz2' if version[0] == 3 && version[1] == 0 && version[2] >= 12
+    extension = 'tar.gz'  if version[0] == 3 && version[1] == 0
+
+    # Version 3.0.12 (and later?) separate the OS and arch with an underscore, rather than a dash
+    os_arch_separator = '-' if version[0] == 3 && version[1] == 0 && version[2] <= 11
+    os_arch_separator = '_' if version[0] == 3 && version[1] == 0 && version[2] >= 12
+
     remote_file 'download server code' do
-      source url
-      path  ::File.join Chef::Config[:file_cache_path], "teamspeak3-server_linux_amd64-#{new_resource.version}.tar.bz2"
+      source "http://dl.4players.de/ts/releases/#{new_resource.version}/teamspeak3-server_linux#{os_arch_separator}amd64-#{new_resource.version}.#{extension}"
+      path  ::File.join Chef::Config[:file_cache_path], "teamspeak3-server_linux#{os_arch_separator}amd64-#{new_resource.version}.#{extension}"
     end
 
-    # TODO: if bz2 archive
-    execute 'extract bz2 archive' do
-      cwd     Chef::Config[:file_cache_path]
-      command "bzip2 -d teamspeak3-server_linux_amd64-#{new_resource.version}.tar.bz2"
+    # BZ2 extracts to the tar, which we need to then extract to the install dir.
+    bash 'extract bz2 archive' do
+      only_if { extension == 'tar.bz2' }
+      cwd     Chef::Config['file_cache_path']
+      code <<-EOH
+        bzip2 -d teamspeak3-server_linux#{os_arch_separator}amd64-#{new_resource.version}.tar.bz2
+        tar -xf teamspeak3-server_linux#{os_arch_separator}amd64-#{new_resource.version}.tar -C #{new_resource.install_dir} --strip-components=1
+      EOH
     end
 
-    # TODO: if tar archive
-    execute 'untar archive to install dir' do
-      cwd Chef::Config['file_cache_path']
-      command "tar -xf teamspeak3-server_linux_amd64-#{new_resource.version}.tar -C #{new_resource.install_dir} --strip-components=1"
+    # For gzip archives, we can extract it directly to the install dir
+    execute 'extract gzip archive' do
+      only_if  { extension == 'tar.gz' }
+      cwd     Chef::Config['file_cache_path']
+      command "tar -xzf teamspeak3-server_linux#{os_arch_separator}amd64-#{new_resource.version}.tar.gz -C #{new_resource.install_dir} --strip-components=1"
     end
 
     new_resource.updated_by_last_action(true)
@@ -50,6 +62,13 @@ end
 
 def path_exists?(path)
   ::File.exists?(::File.join path, 'ts3server')
+end
+
+# Coerces a version string into an integer array.
+# Params: None (+new_resource+ implied)
+# Returns: +Array[Fixnum]+:: The array representation of the version number, with major version in index 0.
+def resource_split_version
+  return new_resource.version.split('.').map(&:to_i)
 end
 
 def load_current_resource

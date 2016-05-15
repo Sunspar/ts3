@@ -1,5 +1,5 @@
 ts3_install 'demo installation of TeamSpeak 3' do
-  version     '3.0.12.4'
+  version     '3.0.8'
   install_dir '/srv/ts3'
 end
 
