@@ -13,14 +13,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   # Define each vm you want to test against.
-  config.vm.define 'ubuntu-1404', primary: true, autostart: false do |ubuntu|
-    ubuntu.vm.hostname  = 'ubuntu-1404'
-    ubuntu.vm.box       = 'ubuntu/trusty64'
-  end
-
   config.vm.define 'ubuntu-1510', autostart: false do |ubuntu|
     ubuntu.vm.hostname  = 'ubuntu-1510'
     ubuntu.vm.box       = 'ubuntu/wily64'
+  end
+
+  config.vm.define 'fedora-23', autostart: false do |fedora|
+    fedora.vm.hostname  = 'fedora-23'
+    fedora.vm.box       = 'bento/fedora-23'
   end
 
   # Configure the VM's networking.

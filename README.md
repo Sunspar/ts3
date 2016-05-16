@@ -1,6 +1,13 @@
 # TS3
 LWRPs for installing and configuring TeamSpeak 3 servers.
 
+## Supported Setups
+THe cookbook has been manually tested against the following configurations:
+64-bit Ubuntu 15.10 (with systemd)
+64-bit Fedora 23 (with systemd)
+
+In general, any virtual machine configured in the `Vagrantfile` is _expected_ to work, and it should be considered a bug if you run into issues running against any of them.
+
 ## Usage
 Simply call the `ts3_install` LWRP to handle installing instances and the `ts3_configure` LWRP for configuring pre-existing instances.
 
