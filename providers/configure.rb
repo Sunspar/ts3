@@ -1,5 +1,9 @@
 use_inline_resources
 
+def whyrun_supported?
+  true
+end
+
 action :run do
   user 'system account' do
     username  new_resource.user

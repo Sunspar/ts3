@@ -1,5 +1,9 @@
 use_inline_resources
 
+def whyrun_supported?
+  true
+end
+
 action :install do
   if resource_exists?
     new_resource.updated_by_last_action(false)

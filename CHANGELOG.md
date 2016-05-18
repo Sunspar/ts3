@@ -1,13 +1,11 @@
-ts3 CHANGELOG
-=============
+# ts3
 
-This file is used to list changes made in each version of the ts3 cookbook.
+v0.1.1
 
-0.1.0
------
-- [your_name] - Initial release of ts3
+- RuboCop cleanup (minus a few lines which are > 120 characters)
+- Initial Kitchen setup for ubuntu and fedora systems
+- pulled the service startup out of the LWRP (let caller decide when to start services)
 
-- - -
-Check the [Markdown Syntax Guide](http://daringfireball.net/projects/markdown/syntax) for help with Markdown.
+v0.1.0
 
-The [Github Flavored Markdown page](http://github.github.com/github-flavored-markdown/) describes the differences between markdown on github and standard markdown.
+- Inital release with a very basic install and configure LWRP, along with demo recipe showing the process.
