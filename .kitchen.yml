@@ -7,9 +7,10 @@ provisioner:
 
 platforms:
   - name: ubuntu-15.10
+  - name: ubuntu-1404
+  - name: fedora-23
 
 suites:
   - name: default
     run_list:
       - recipe[ts3::default]
-    attributes:

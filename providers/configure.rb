@@ -26,18 +26,18 @@ action :run do
   end
 
   case new_resource.job_control
-    when 'systemd'
-      files =[{
-        source:     'job_control/systemd/ts3-server.service.erb',
-        path:       "/etc/systemd/system/ts3-#{new_resource.server_name}.service",
-        variables:  resource_job_params
-      }]
-      service_reset_command = 'systemctl daemon-reload'
-    when 'manual'
-      files = []
-      service_reset_command = nil
-    else
-      raise Chef::Exceptions::UnsupportedAction, 'The ts3_configure LWRP does not currently support this management system.'
+  when 'systemd'
+    files = [{
+      source:     'job_control/systemd/ts3-server.service.erb',
+      path:       "/etc/systemd/system/ts3-#{new_resource.server_name}.service",
+      variables:  resource_job_params
+    }]
+    service_reset_command = 'systemctl daemon-reload'
+  when 'manual'
+    files = []
+    service_reset_command = nil
+  else
+    raise Chef::Exceptions::UnsupportedAction, 'This management system is currently unsupported.'
   end
 
   files.each do |file|
@@ -53,6 +53,8 @@ action :run do
     only_if service_reset_command
     command service_reset_command
   end
+
+  new_resource.updated_by_last_action(true)
 end
 
 def resource_job_params

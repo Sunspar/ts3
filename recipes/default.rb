@@ -9,3 +9,8 @@ ts3_configure 'demo Teamspeak 3 server configuration' do
   server_name 'server'
   job_control 'systemd'
 end
+
+service 'start server' do
+  service_name  'ts3-server'
+  action        :start
+end

@@ -18,8 +18,8 @@ action :install do
     os_arch_separator = '_' if version[0] == 3 && version[1] == 0 && version[2] >= 12
 
     remote_file 'download server code' do
-      source "http://dl.4players.de/ts/releases/#{new_resource.version}/teamspeak3-server_linux#{os_arch_separator}amd64-#{new_resource.version}.#{extension}"
-      path  ::File.join Chef::Config[:file_cache_path], "teamspeak3-server_linux#{os_arch_separator}amd64-#{new_resource.version}.#{extension}"
+      source  "http://dl.4players.de/ts/releases/#{new_resource.version}/teamspeak3-server_linux#{os_arch_separator}amd64-#{new_resource.version}.#{extension}"
+      path    ::File.join(Chef::Config[:file_cache_path], "teamspeak3-server_linux#{os_arch_separator}amd64-#{new_resource.version}.#{extension}")
     end
 
     # BZ2 extracts to the tar, which we need to then extract to the install dir.
@@ -34,7 +34,7 @@ action :install do
 
     # For gzip archives, we can extract it directly to the install dir
     execute 'extract gzip archive' do
-      only_if  { extension == 'tar.gz' }
+      only_if { extension == 'tar.gz' }
       cwd     Chef::Config['file_cache_path']
       command "tar -xzf teamspeak3-server_linux#{os_arch_separator}amd64-#{new_resource.version}.tar.gz -C #{new_resource.install_dir} --strip-components=1"
     end
@@ -61,17 +61,19 @@ def resource_exists?
 end
 
 def path_exists?(path)
-  ::File.exists?(::File.join path, 'ts3server')
+  ::File.exist?(::File.join(path, 'ts3server'))
 end
 
 # Coerces a version string into an integer array.
 # Params: None (+new_resource+ implied)
 # Returns: +Array[Fixnum]+:: The array representation of the version number, with major version in index 0.
 def resource_split_version
-  return new_resource.version.split('.').map(&:to_i)
+  new_resource.version.split('.').map(&:to_i)
 end
 
 def load_current_resource
-  @current_resource = Chef::Resource::Ts3Install.new(version: new_resource.version, install_dir: new_resource.install_dir)
+  @current_resource = Chef::Resource::Ts3Install.new(
+    version: new_resource.version,
+    install_dir: new_resource.install_dir)
   @current_resource
 end
