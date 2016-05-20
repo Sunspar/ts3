@@ -14,8 +14,8 @@ action :install do
 
     # Version 3.0.12 (and later?) are supplied as *.tar.bz2 archives, instead of the usual *.tar.gz.
     version = resource_split_version
+    extension = 'tar.gz'  if version[0] == 3 && version[1] == 0 && version[2] <  12
     extension = 'tar.bz2' if version[0] == 3 && version[1] == 0 && version[2] >= 12
-    extension = 'tar.gz'  if version[0] == 3 && version[1] == 0
 
     # Version 3.0.12 (and later?) separate the OS and arch with an underscore, rather than a dash
     os_arch_separator = '-' if version[0] == 3 && version[1] == 0 && version[2] <= 11
@@ -65,7 +65,7 @@ def resource_exists?
 end
 
 def path_exists?(path)
-  ::File.exist?(::File.join(path, 'ts3server'))
+  ::File.exist?(::File.join(path, 'ts3server_startscript.sh'))
 end
 
 # Coerces a version string into an integer array.
