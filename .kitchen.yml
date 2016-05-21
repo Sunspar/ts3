@@ -6,11 +6,30 @@ provisioner:
   name: chef_solo
 
 platforms:
+  - name: ubuntu-14.04
+    attributes:
+      ts3_configure:
+        job_control: 'manual'
   - name: ubuntu-15.10
-  - name: ubuntu-1404
+    attributes:
+      ts3_configure:
+        job_control: 'systemd'
   - name: fedora-23
+    attributes:
+      ts3_configure:
+        job_control: 'systemd'
 
 suites:
   - name: default
     run_list:
-      - recipe[ts3::default]
+      - recipe[ts3::_test_install]
+      - recipe[ts3::_test_configure]
+    attributes:
+      ts3_install:
+        version: '3.0.12.4'
+        install_dir: '/srv/ts3/'
+        action: 'install'
+      ts3_configure:
+        user: 'teamspeakd'
+        install_dir: '/srv/ts3/'
+        server_name: 'server'

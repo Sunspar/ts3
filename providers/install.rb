@@ -21,9 +21,19 @@ action :install do
     os_arch_separator = '-' if version[0] == 3 && version[1] == 0 && version[2] <= 11
     os_arch_separator = '_' if version[0] == 3 && version[1] == 0 && version[2] >= 12
 
+    # Set architecture (32 vs 64 bit)
+    case node['kernel']['machine']
+    when 'x86_64', 'amd64'
+      arch = 'amd64'
+    when 'i386', 'i686'
+      arch = 'x86'
+    else
+      raise Chef::Exceptions::UnsupportedAction, "ts3_install does not understand or support your platform architecture: #{node['kernel']['machine']}"
+    end
+
     remote_file 'download server code' do
-      source  "http://dl.4players.de/ts/releases/#{new_resource.version}/teamspeak3-server_linux#{os_arch_separator}amd64-#{new_resource.version}.#{extension}"
-      path    ::File.join(Chef::Config[:file_cache_path], "teamspeak3-server_linux#{os_arch_separator}amd64-#{new_resource.version}.#{extension}")
+      source  "http://dl.4players.de/ts/releases/#{new_resource.version}/teamspeak3-server_linux#{os_arch_separator}#{arch}-#{new_resource.version}.#{extension}"
+      path    ::File.join(Chef::Config[:file_cache_path], "teamspeak3-server_linux#{os_arch_separator}#{arch}-#{new_resource.version}.#{extension}")
     end
 
     # BZ2 extracts to the tar, which we need to then extract to the install dir.
@@ -31,8 +41,8 @@ action :install do
       only_if { extension == 'tar.bz2' }
       cwd     Chef::Config['file_cache_path']
       code <<-EOH
-        bzip2 -d teamspeak3-server_linux#{os_arch_separator}amd64-#{new_resource.version}.tar.bz2
-        tar -xf teamspeak3-server_linux#{os_arch_separator}amd64-#{new_resource.version}.tar -C #{new_resource.install_dir} --strip-components=1
+        bzip2 -d teamspeak3-server_linux#{os_arch_separator}#{arch}-#{new_resource.version}.tar.bz2
+        tar -xf teamspeak3-server_linux#{os_arch_separator}#{arch}-#{new_resource.version}.tar -C #{new_resource.install_dir} --strip-components=1
       EOH
     end
 
@@ -40,7 +50,7 @@ action :install do
     execute 'extract gzip archive' do
       only_if { extension == 'tar.gz' }
       cwd     Chef::Config['file_cache_path']
-      command "tar -xzf teamspeak3-server_linux#{os_arch_separator}amd64-#{new_resource.version}.tar.gz -C #{new_resource.install_dir} --strip-components=1"
+      command "tar -xzf teamspeak3-server_linux#{os_arch_separator}#{arch}-#{new_resource.version}.tar.gz -C #{new_resource.install_dir} --strip-components=1"
     end
 
     new_resource.updated_by_last_action(true)

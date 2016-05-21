@@ -54,7 +54,7 @@ action :run do
   end
 
   execute 'fix job cache' do
-    only_if service_reset_command
+    only_if { service_reset_command }
     command service_reset_command
   end
 
