@@ -10,6 +10,12 @@ action :run do
     system    true
   end
 
+  template 'ts3server ini config' do
+    source    'ts3server.ini.erb'
+    path      ::File.join(new_resource.install_dir, 'ts3server.ini')
+    variables ( default_ini_params.merge(new_resource.ini_parameters) )
+  end
+
   # This is hacky, but hear me out....
   # In order for the server to operate correctly, the entire install location needs to be owned by the
   # daemon account. Due to a long standing issue with the directory resource (of which there are two camps,
@@ -65,5 +71,32 @@ def resource_job_params
   {
     user:         new_resource.user,
     install_dir:  new_resource.install_dir
+  }
+end
+
+
+def default_ini_params
+  {
+    machine_id:                 '',
+    default_voice_port:         '9987',
+    voice_ip:                   '0.0.0.0',
+    licensepath:                '',
+    filetransfer_port:          '30033',
+    filetransfer_ip:            '0.0.0.0',
+    query_port:                 '10011',
+    query_ip:                   '0.0.0.0',
+    query_ip_whitelist:         'query_ip_whitelist.txt',
+    query_ip_blacklist:         'query_ip_blacklist.txt',
+    query_skipbruteforcecheck:  '0',
+    dbplugin:                   'ts3db_sqlite3',
+    dbpluginparameter:          '',
+    dbsqlpath:                  'sql/',
+    dbsqlcreatepath:            'create_sqlite/',
+    dbconnections:              '10',
+    dblogkeepdays:              '90',
+    dbclientkeepdays:           '30',
+    logpath:                    'logs/',
+    logquerycommands:           '0',
+    logappend:                  '0'
   }
 end

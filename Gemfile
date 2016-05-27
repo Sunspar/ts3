@@ -1,6 +1,10 @@
 source 'https://rubygems.org'
 
-gem 'test-kitchen'
-gem 'kitchen-vagrant'
-gem 'rubocop'
-gem 'chefspec'
+group :development do
+  gem 'berkshelf'
+  gem 'foodcritic'
+  gem 'rubocop'
+  gem 'test-kitchen'
+  gem 'kitchen-vagrant'
+  gem 'chefspec'
+end

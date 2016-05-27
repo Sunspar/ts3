@@ -24,6 +24,8 @@ describe 'ts3_configure' do
     expect(chef_run).to run_execute('server directory ownership').with(cwd: '/srv/ts3/', command: 'chown -R teamspeakd:teamspeakd /srv/ts3/')
   end
 
+  # TODO: it creates the ts3server.ini file with default parameters
+
   describe 'job control options' do
     describe 'manual' do
       let(:chef_run) do

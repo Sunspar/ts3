@@ -8,6 +8,6 @@ end
 unless node['ts3_configure']['job_control'] == 'manual'
   service 'start server' do
     service_name  "ts3-#{node['ts3_configure']['server_name']}"
-    action        :start
+    action        :restart
   end
 end

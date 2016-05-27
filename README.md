@@ -2,17 +2,13 @@
 LWRPs for installing and configuring TeamSpeak 3 servers.
 
 ## Supported Setups
-THe cookbook has been manually tested against the following configurations:
-64-bit Ubuntu 15.10 (with systemd)
-64-bit Fedora 23 (with systemd)
-
-In general, any virtual machine configured in the `Vagrantfile` is _expected_ to work, and it should be considered a bug if you run into issues running against any of them.
+In general, an OS is said to be supported if it is listed in `.kitchen.yml` under the platforms section.  
+Although all supported OS and job control systems _should_ work, we test using the default systems provided by the OS (for example, systemd on Fedora 23).  
 
 ## Usage
 Simply call the `ts3_install` LWRP to handle installing instances and the `ts3_configure` LWRP for configuring pre-existing instances.
 
 ## Resource Providers
-
 ### ts3_install
 Installs the TeamSpeak 3 server.
 
@@ -32,4 +28,9 @@ Configures a TeamSpeak 3 server.
 | job_control | false | String | manual | The service system used by your hardware. Used to create management scripts automatically. |
 
 #### Job Control types
-Currently, only 'manual' and 'systemd' types are supported. Manual simply indicates that no particular system is to be used, and that the administrator will handle starting/stopping the server themselves. More systems are planned, notably upstart and supervisor.
+The following job control systems are supported by the LWRP:
+
+| Type | Description
+| :-: | :-:
+| manual | Don't bother installing any scripts, as the server will be managed manually by the administrator.
+| systemd | Install a service for systemd managed by systemctl.
