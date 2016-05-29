@@ -1,4 +1,10 @@
-# ts3
+# ts3 Cookbook
+
+v 0.2.0-pre
+
+- Added very basic inspec tests (does the server start up? port is ok?)
+- Cleaned up chefspec tests
+- fixed downloaded file extension so that both sides of the 3.0.12 divide worked as expected (bz2 versus tar.gz)
 
 v0.1.1
 

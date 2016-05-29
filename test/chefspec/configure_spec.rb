@@ -72,4 +72,3 @@ describe 'ts3_configure' do
     end
   end
 end
-

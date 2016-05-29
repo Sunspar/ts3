@@ -1,7 +1,6 @@
 require 'chefspec'
 
 RSpec.configure do |cfg|
-
   cfg.cookbook_path = '../../cookbooks/'
 
   # If there are issues and you need better debugging, change this

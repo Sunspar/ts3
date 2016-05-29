@@ -88,6 +88,7 @@ end
 def load_current_resource
   @current_resource = Chef::Resource::Ts3Install.new(
     version: new_resource.version,
-    install_dir: new_resource.install_dir)
+    install_dir: new_resource.install_dir
+  )
   @current_resource
 end
