@@ -43,9 +43,11 @@ action :run do
       variables:  resource_job_params
     }]
     service_reset_command = 'systemctl daemon-reload'
+    service_enable_command = "systemctl enable ts3-#{new_resource.server_name}"
   when 'manual'
     files = []
     service_reset_command = nil
+    service_enable_command = nil
   else
     raise Chef::Exceptions::UnsupportedAction, 'This management system is currently unsupported.'
   end
@@ -59,7 +61,12 @@ action :run do
     end
   end
 
-  execute 'fix job cache' do
+  execute 'enable service' do
+    only_if { service_enable_command }
+    command service_enable_command
+  end
+
+  execute 'reload service cache' do
     only_if { service_reset_command }
     command service_reset_command
   end
@@ -73,7 +80,6 @@ def resource_job_params
     install_dir:  new_resource.install_dir
   }
 end
-
 
 def default_ini_params
   {

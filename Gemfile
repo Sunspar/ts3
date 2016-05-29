@@ -7,4 +7,6 @@ group :development do
   gem 'test-kitchen'
   gem 'kitchen-vagrant'
   gem 'chefspec'
+  gem 'inspec'
+  gem 'kitchen-inspec'
 end

@@ -5,6 +5,9 @@ driver:
 provisioner:
   name: chef_solo
 
+verifier:
+  name: inspec
+
 platforms:
   - name: ubuntu-14.04
     attributes:
@@ -20,7 +23,7 @@ platforms:
         job_control: 'systemd'
 
 suites:
-  - name: default
+  - name: server
     run_list:
       - recipe[ts3::_test_install]
       - recipe[ts3::_test_configure]

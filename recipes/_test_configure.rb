@@ -5,9 +5,8 @@ ts3_configure 'demo Teamspeak 3 server configuration' do
   job_control node['ts3_configure']['job_control']
 end
 
-unless node['ts3_configure']['job_control'] == 'manual'
-  service 'start server' do
-    service_name  "ts3-#{node['ts3_configure']['server_name']}"
-    action        :restart
-  end
+service 'start server' do
+  only_if       { node['ts3_configure']['job_control'] == 'manual' }
+  service_name  "ts3-#{node['ts3_configure']['server_name']}"
+  action        :restart
 end
