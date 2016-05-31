@@ -8,11 +8,9 @@ Although all supported OS and job control systems _should_ work, we test using t
 ## Usage
 Simply call the `ts3_install` LWRP to handle installing instances and the `ts3_configure` LWRP for configuring pre-existing instances.
 
-## Running Tests
-Unit tests can be found under the `test/chefspec` directory and can be run via `bundle exec rspec test/chefspec`.  
-Integration tests are written with InSpec and can be found under the `test/inspec` directory.  
-Run rubocop from the cookbook root: `bundle exec rubocop .`.  
-Run foodcritic from the cookbook root for chef-specific lint checking: `bundle exec foodcritic .`.  
+## Rakefile
+The included rakefile has a number of quick-and-dirty tasks defined to make life easier. For example, there are tasks defined to allow one-liners for running tests, style checks, and tagging/deployment.  
+Check the `Rakefile` out for more information. You can also run `rake -T` to get a listing and description of what each task does.
 
 ## Resource Providers
 ### ts3_install

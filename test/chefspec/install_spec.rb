@@ -61,15 +61,15 @@ describe 'ts3_install delete' do
     end.converge('recipe[ts3::_test_install]')
   end
 
-  it 'deletes when called with a valid start script in the install dir' do
+  it 'deletes valid install dir' do
     allow(::File).to receive(:exist?).and_call_original
     allow(::File).to receive(:exist?).with('/srv/ts3/ts3server_startscript.sh').and_return(true)
     expect(chef_run).to delete_directory('remove install dir').with(path: '/srv/ts3/')
   end
 
-  it 'does not delete when called without the start script in the install dir' do
+  it 'does not delete invalid install dir' do
     allow(::File).to receive(:exist?).and_call_original
     allow(::File).to receive(:exist?).with('/srv/ts3/ts3server_startscript.sh').and_return(false)
-    expect(chef_run).to_not delete_directory('remove install dir').with(path: '/srv/ts3/')
+    expect(chef_run).to_not delete_directory('remove install dir').with(path: '/srv/tss3/')
   end
 end
