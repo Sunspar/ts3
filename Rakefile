@@ -51,33 +51,19 @@ task 'style:all' => ['style:chef', 'style:ruby']
 desc 'TS3 | Project interaction helpers'
 namespace :project do
   desc 'TS3 | Project | Version bumping'
-  task :bump do
+  task :tag do
     require 'bump'
     require 'bump/tasks'
     require 'open3'
     version = Bump::Bump.current
-    p_response, p_status = Open3.capture2("git push && git tag v#{version} && git push --tags")
-
-    if p_status.success?
-      print "Tagged v#{version} successfully"
-    else
-      print "There was an error pushing the version tag. Stream below:\n"
-      print p_response
-    end
+    Open3.capture2("git push && git tag v#{version} && git push --tags")
   end
 
   desc 'TS3 | Project | Deploy to supermarket'
   task :deploy, :key do |_, args|
     require 'open3'
     key = args[:key]
-    p_response, p_status = Open3.capture2("knife cookbook site share ts3 'Applications' --key #{key}")
-
-    if p_status.success?
-      print "Pushed v#{version} to the Chef Supermarket!"
-    else
-      print "There was a problem pushing to the Chef Supermarket. Stream below:\n"
-      print p_response
-    end
+    Open3.capture2("knife cookbook site share ts3 'Applications' --key #{key}")
   end
 
   desc 'TS3 | Project | Release new version'

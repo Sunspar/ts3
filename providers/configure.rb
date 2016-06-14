@@ -11,9 +11,10 @@ action :run do
   end
 
   template 'ts3server ini config' do
+    cookbook  'ts3'
     source    'ts3server.ini.erb'
     path      ::File.join(new_resource.install_dir, 'ts3server.ini')
-    variables ( default_ini_params.merge(new_resource.ini_parameters) )
+    variables (default_ini_params.merge(new_resource.ini_parameters))
   end
 
   # This is hacky, but hear me out....
@@ -54,6 +55,7 @@ action :run do
 
   files.each do |file|
     template "job control - #{file[:source]}" do
+      cookbook  'ts3'
       source    file[:source]
       path      file[:path]
       variables file[:variables]

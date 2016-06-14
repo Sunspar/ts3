@@ -5,8 +5,7 @@ def whyrun_supported?
 end
 
 action :install do
-  if resource_exists?
-    new_resource.updated_by_last_action(false)
+  if resource_exists? && new_resource.updated_by_last_action(false)
   else
     directory 'create install dir' do
       path new_resource.install_dir
@@ -52,6 +51,8 @@ action :install do
       cwd     Chef::Config['file_cache_path']
       command "tar -xzf teamspeak3-server_linux#{os_arch_separator}#{arch}-#{new_resource.version}.tar.gz -C #{new_resource.install_dir} --strip-components=1"
     end
+
+    # TODO: Write .ts3-version file out so we can deal with subsequent runs and version matching
 
     new_resource.updated_by_last_action(true)
   end

@@ -1,6 +1,10 @@
 ---
 driver:
   name: vagrant
+  network:
+    - ["forwarded_port", {guest: 9987, host: 9987, protocol: 'udp'}]
+    - ["forwarded_port", {guest: 10011, host: 10011}]
+    - ["forwarded_port", {guest: 30033, host: 30033}]
 
 provisioner:
   name: chef_solo
@@ -30,9 +34,9 @@ suites:
     attributes:
       ts3_install:
         version: '3.0.12.4'
-        install_dir: '/srv/ts3/'
+        install_dir: '/opt/ts3/'
         action: 'install'
       ts3_configure:
         user: 'teamspeakd'
-        install_dir: '/srv/ts3/'
+        install_dir: '/opt/ts3/'
         server_name: 'server'
