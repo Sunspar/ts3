@@ -1,20 +1,24 @@
-use_inline_resources
+resource_name :ts3_server_configure
 
-def whyrun_supported?
-  true
-end
+property :service_user, String, required: true
+property :install_dir, String, required: true
+property :server_name, String, default: 'server'
+property :job_control, String, default: 'manual'
+property :ini_parameters, Hash, default: {}
+
+
 
 action :run do
   user 'system account' do
-    username  new_resource.user
+    username  service_user
     system    true
   end
 
   template 'ts3server ini config' do
     cookbook  'ts3'
     source    'ts3server.ini.erb'
-    path      ::File.join(new_resource.install_dir, 'ts3server.ini')
-    variables (default_ini_params.merge(new_resource.ini_parameters))
+    path      ::File.join(install_dir, 'ts3server.ini')
+    variables (default_ini_params.merge(ini_parameters))
   end
 
   # This is hacky, but hear me out....
@@ -32,19 +36,19 @@ action :run do
   #
   # See: https://tickets.opscode.com/browse/CHEF-1621
   execute 'server directory ownership' do
-    cwd new_resource.install_dir
-    command "chown -R #{new_resource.user}:#{new_resource.user} #{new_resource.install_dir}"
+    cwd install_dir
+    command "chown -R #{service_user}:#{service_user} #{install_dir}"
   end
 
-  case new_resource.job_control
+  case job_control
   when 'systemd'
     files = [{
-      source:     'job_control/systemd/ts3-server.service.erb',
-      path:       "/etc/systemd/system/ts3-#{new_resource.server_name}.service",
-      variables:  resource_job_params
-    }]
+               source:     'job_control/systemd/ts3-server.service.erb',
+               path:       "/etc/systemd/system/ts3-#{server_name}.service",
+               variables:  resource_job_params
+             }]
     service_reset_command = 'systemctl daemon-reload'
-    service_enable_command = "systemctl enable ts3-#{new_resource.server_name}"
+    service_enable_command = "systemctl enable ts3-#{server_name}"
   when 'manual'
     files = []
     service_reset_command = nil
@@ -73,13 +77,13 @@ action :run do
     command service_reset_command
   end
 
-  new_resource.updated_by_last_action(true)
+  updated_by_last_action(true)
 end
 
 def resource_job_params
   {
-    user:         new_resource.user,
-    install_dir:  new_resource.install_dir
+    user:         service_user,
+    install_dir:  install_dir
   }
 end
 

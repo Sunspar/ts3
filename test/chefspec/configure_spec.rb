@@ -21,7 +21,9 @@ describe 'ts3_configure' do
 
   it 'runs chown -R on the install dir' do
     stub_command('chown -R teamspeakd:teamspeakd /srv/ts3/').and_return(0)
+    # rubocop:disable Metrics/LineLength
     expect(chef_run).to run_execute('server directory ownership').with(cwd: '/srv/ts3/', command: 'chown -R teamspeakd:teamspeakd /srv/ts3/')
+    # rubocop:enable Metrics/LineLength
   end
 
   # TODO: it creates the ts3server.ini file with default parameters

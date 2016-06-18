@@ -28,7 +28,9 @@ describe 'ts3_install' do
     end
 
     it 'downloads the server executable' do
+      # rubocop:disable Metrics/LineLength
       expect(chef_run).to create_remote_file('download server code').with(path: File.join(Chef::Config['file_cache_path'], 'teamspeak3-server_linux-amd64-3.0.8.tar.gz'))
+      # rubocop:enable Metrics/LineLength
     end
   end
 
@@ -43,7 +45,9 @@ describe 'ts3_install' do
     end
 
     it 'downloads the server executable' do
+      # rubocop:disable Metrics/LineLength
       expect(chef_run).to create_remote_file('download server code').with(path: File.join(Chef::Config['file_cache_path'], 'teamspeak3-server_linux_amd64-3.0.12.4.tar.bz2'))
+      # rubocop:enable Metrics/LineLength
     end
   end
 end

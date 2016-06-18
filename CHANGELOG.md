@@ -1,4 +1,9 @@
 # ts3 Cookbook
+
+vNext
+
+- Switched to 12.5-style for resource definition for the `ts3_install` and `ts3_configure` resources
+
 v 0.2.0 (16 June 2016)
 
 - Fixed an issue where template files weren't being pulled in properly during the convergence process.
