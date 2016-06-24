@@ -13,7 +13,7 @@ The included rakefile has a number of quick-and-dirty tasks defined to make life
 Check the `Rakefile` out for more information. You can also run `rake -T` to get a listing and description of what each task does.
 
 ## Resource Providers
-### ts3_install
+### ts3_server_install
 Installs the TeamSpeak 3 server.
 
 | Attribute | Required? | Type | Default | Usage |
@@ -21,7 +21,7 @@ Installs the TeamSpeak 3 server.
 | install_dir | true | String | --- | The location on the filesystem to install the TS3 server to. |
 | version | true | String | --- | The version of the server software to install. |
 
-### ts3_configure
+### ts3_server_configure
 Configures a TeamSpeak 3 server.
 
 | Attribute | Required? | Type | Default | Usage |

@@ -10,3 +10,5 @@ issues_url        'https://github.com/Sunspar/ts3/issues'
 
 supports 'ubuntu'
 supports 'fedora'
+supports 'centos'
+supports 'debian'

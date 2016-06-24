@@ -19,4 +19,6 @@ bin/*
 .kitchen/
 .kitchen.local.yml
 
+.yardoc/
+
 .idea/

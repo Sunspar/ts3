@@ -1,0 +1,2 @@
+- Add a generic SysV script for older versions which do not use upstart or systemd
+- get client installer working on linux, then on windows

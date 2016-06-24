@@ -1,4 +1,5 @@
 resource_name :ts3_server_configure
+default_action :run
 
 property :service_user, String, required: true
 property :install_dir, String, required: true
@@ -7,7 +8,7 @@ property :job_control, String, default: 'manual'
 property :ini_parameters, Hash, default: {}
 
 
-
+# Configure the TeamSpeak 3 server that this resource represents.
 action :run do
   user 'system account' do
     username  service_user
@@ -42,13 +43,35 @@ action :run do
 
   case job_control
   when 'systemd'
-    files = [{
-               source:     'job_control/systemd/ts3-server.service.erb',
-               path:       "/etc/systemd/system/ts3-#{server_name}.service",
-               variables:  resource_job_params
-             }]
+    files = [
+      {
+        source:     'job_control/systemd/ts3-server.service.erb',
+        path:       ::File.join('', 'etc', 'systemd', 'system', "ts3-#{server_name}.service"),
+        variables:  resource_job_params
+      }
+    ]
     service_reset_command = 'systemctl daemon-reload'
     service_enable_command = "systemctl enable ts3-#{server_name}"
+  when 'upstart'
+    files = [
+      {
+        source:     'job_control/upstart/ts3-server.conf.erb',
+        path:       ::File.join('', 'etc', 'init', "ts3-#{server_name}.conf"),
+        variables:  resource_job_params
+      }
+    ]
+    service_reset_command = nil
+    service_enable_command = nil
+  when 'initd'
+    files = [
+      {
+        source:     'job_control/sysv/ts3-server.erb',
+        path:       ::File.join('', 'etc', 'init.d', "ts3-#{server_name}"),
+        variables:  resource_job_params
+      }
+    ]
+    service_reset_command = nil
+    service_enable_command = nil
   when 'manual'
     files = []
     service_reset_command = nil
@@ -80,6 +103,11 @@ action :run do
   updated_by_last_action(true)
 end
 
+# Creates a hash of default job parameters.
+#
+# @return [Hash] The hash of default parameters for job control scripts based on the current resource's properties.
+# @example
+#   { user: 'teamspeakd', install_dir: '/opt/ts3/' }
 def resource_job_params
   {
     user:         service_user,
@@ -87,6 +115,9 @@ def resource_job_params
   }
 end
 
+# Creates a hash of default teamspeak.ini parameters.
+#
+# @return [Hash] the complete hash of ts3server.ini parameters with generic defaults.
 def default_ini_params
   {
     machine_id:                 '',

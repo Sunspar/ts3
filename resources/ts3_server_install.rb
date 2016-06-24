@@ -1,8 +1,10 @@
 resource_name :ts3_server_install
+default_action :install
 
 property :install_dir, String, required: true
 property :version, String, required: true
 
+# Install the TS3 server.
 action :install do
   if resource_exists? && resource_version == version
     updated_by_last_action(false)
@@ -28,7 +30,7 @@ action :install do
       arch = 'x86'
     else
       # rubocop:disable Metrics/LineLength
-      raise Chef::Exceptions::UnsupportedAction, "ts3_install does not understand or support your platform architecture: #{node['kernel']['machine']}"
+      raise Chef::Exceptions::UnsupportedAction, "ts3_server_install does not understand or support your platform architecture: #{node['kernel']['machine']}"
       # rubocop:enable Metrics/LineLength
     end
 
@@ -66,6 +68,7 @@ action :install do
   end
 end
 
+# Removes TS3 Server from the resource's install_dir.
 action :delete do
   if resource_exists?
     directory 'remove install dir' do
@@ -79,7 +82,10 @@ action :delete do
   end
 end
 
-# Helper method to fetch the version information from the .ts3-version file.
+# Grab the version of TS3 installed by the ts3_server_install resource.
+#
+# @return [String] the version found in the .ts3-version file at the resource's install_dir, or the string '0'
+#   if the file is missing.
 def resource_version
   version_file = ::File.join(install_dir, '.ts3-version')
   if ::File.exist?(version_file)
@@ -90,18 +96,22 @@ def resource_version
   result
 end
 
-# Helper method to determine whether or not the install directory represents an existing resource installation.
+# Determine whether the resource represents an existing installation.
+#
+# @return [TrueClass, FalseClass] whether or not TS3 is installed at the resource's install_dir
 def resource_exists?
   path_exists? install_dir
 end
 
-# Determine whether or not the given path is a reference to an installation of the TeamSpeak 3 server.
+# Determine whether the given path is a reference to an installation of the TeamSpeak 3 server.
+#
+# @return [TrueClass, FalseClass] whether or not TS3 is installed at the given path.
 def path_exists?(path)
   ::File.exist?(::File.join(path, 'ts3server_startscript.sh'))
 end
 
 def load_current_resource
-  @current_resource = Chef::Resource::Ts3Install.new(
+  @current_resource = Chef::Resource::Ts3ServerInstall.new(
     version: version,
     install_dir: install_dir
   )

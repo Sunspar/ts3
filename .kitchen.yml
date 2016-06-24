@@ -15,28 +15,44 @@ verifier:
 platforms:
   - name: ubuntu-14.04
     attributes:
-      ts3_configure:
-        job_control: 'manual'
-  - name: ubuntu-15.10
+      ts3_server_configure:
+        job_control: 'initd'
+  - name: ubuntu-16.04
     attributes:
-      ts3_configure:
+      ts3_server_configure:
         job_control: 'systemd'
   - name: fedora-23
     attributes:
-      ts3_configure:
+      ts3_server_configure:
+        job_control: 'systemd'
+  - name: debian-7.10
+    attributes:
+      ts3_server_configure:
+        job_control: 'manual'
+  - name: debian-8.4
+    attributes:
+      ts3_server_configure:
+        job_control: 'systemd'
+  - name: centos-6.7
+    attributes:
+      ts3_server_configure:
+        job_control: 'manual'
+  - name: centos-7.2
+    attributes:
+      ts3_server_configure:
         job_control: 'systemd'
 
 suites:
   - name: server
     run_list:
-      - recipe[ts3::_test_install]
-      - recipe[ts3::_test_configure]
+      - recipe[ts3::_test_server_install]
+      - recipe[ts3::_test_server_configure]
     attributes:
-      ts3_install:
+      ts3_server_install:
         version: '3.0.12.4'
         install_dir: '/opt/ts3/'
         action: 'install'
-      ts3_configure:
+      ts3_server_configure:
         user: 'teamspeakd'
         install_dir: '/opt/ts3/'
         server_name: 'server'
