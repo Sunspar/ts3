@@ -1,6 +1,6 @@
 # ts3 Cookbook
 
-vNext
+v3.0 (1 July 2016)
 
 - Switched to 12.5-style for resource definition for the `ts3_install` and `ts3_configure` resources
 - Added testing and support for systemd compatible versions of Debian and CentOS

@@ -69,7 +69,7 @@ namespace :project do
   desc 'TS3 | Project | Release new version'
   task :release, :key do |_, args|
     key = args[:key]
-    Rake::Task['project:bump'].invoke
+    Rake::Task['project:tag'].invoke
     Rake::Task['project:deploy'].invoke(key)
   end
 end
