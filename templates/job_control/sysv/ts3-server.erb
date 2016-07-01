@@ -9,24 +9,24 @@
 # Description:       TeamSpeak 3 VoIP Server
 ### END INIT INFO
 
-root_dir="<%= @install_dir %>"
-daemon="${root_dir}/ts3server_startscript.sh"
-inifile="${root_dir}/ts3server.ini"
+daemon="<%= File.join @install_dir, 'ts3server_startscript.sh' %>"
+inifile="<%= File.join @install_dir, 'ts3server.ini' %>"
+user="<%= @user %>"
 
 case "$1" in
   start)
-    ${daemon} start --inifile="${inifile}"
+    su "${user}" -c "${daemon} start --inifile=\"${inifile}\" &"
     ;;
   stop)
-    ${daemon} stop
+    su "${user}" -c "${daemon} stop"
     ;;
   restart)
-    ${daemon} restart
+    su "${user}" -c "${daemon} restart"
     ;;
   status)
-    ${daemon} status
+    su "${user}" -c "${daemon} status"
     ;;
   *)
-    ${daemon} "$@"
+    su "${user}" -c "${daemon} \"$@\""
 esac
 exit 0

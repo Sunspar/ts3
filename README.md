@@ -6,7 +6,7 @@ In general, an OS is said to be supported if it is listed in `.kitchen.yml` unde
 Although all supported OS and job control systems _should_ work, we test using the default systems provided by the OS (for example, systemd on Fedora 23).  
 
 ## Usage
-Simply call the `ts3_install` LWRP to handle installing instances and the `ts3_configure` LWRP for configuring pre-existing instances.
+Simply call the `ts3_server_install` LWRP to handle installing instances and the `ts3_server_configure` LWRP for configuring pre-existing instances.
 
 ## Rakefile
 The included rakefile has a number of quick-and-dirty tasks defined to make life easier. For example, there are tasks defined to allow one-liners for running tests, style checks, and tagging/deployment.  
@@ -38,3 +38,4 @@ The following job control systems are supported by the LWRP:
 | :-: | :-:
 | manual | Don't bother installing any scripts, as the server will be managed manually by the administrator.
 | systemd | Install a service for systemd managed by systemctl.
+| sysv | Install a service for SysV (init.d style management).

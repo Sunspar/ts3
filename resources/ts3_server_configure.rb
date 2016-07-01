@@ -52,17 +52,7 @@ action :run do
     ]
     service_reset_command = 'systemctl daemon-reload'
     service_enable_command = "systemctl enable ts3-#{server_name}"
-  when 'upstart'
-    files = [
-      {
-        source:     'job_control/upstart/ts3-server.conf.erb',
-        path:       ::File.join('', 'etc', 'init', "ts3-#{server_name}.conf"),
-        variables:  resource_job_params
-      }
-    ]
-    service_reset_command = nil
-    service_enable_command = nil
-  when 'initd'
+  when 'sysv'
     files = [
       {
         source:     'job_control/sysv/ts3-server.erb',
@@ -70,7 +60,7 @@ action :run do
         variables:  resource_job_params
       }
     ]
-    service_reset_command = nil
+    service_reset_command = "chmod a+x /etc/init.d/ts3-#{server_name}"
     service_enable_command = nil
   when 'manual'
     files = []
